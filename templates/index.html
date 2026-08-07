@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Trekking Management{% endblock %}
+{% block content %}
+<div class="text-center bg-light p-5 rounded mb-4">
+  <h1>Trekking Management</h1>
+  <p class="lead">A simple system for organizers, staff, and trekkers to manage treks end to end.</p>
+  <div class="mt-3">
+    <a href="{{ url_for('auth.login') }}" class="btn btn-primary me-2">Log in</a>
+    <a href="{{ url_for('auth.register_user') }}" class="btn btn-outline-secondary">Register as a Trekker</a>
+  </div>
+</div>
+
+<div class="row g-4 text-center">
+  <div class="col-md-4">
+    <div class="card h-100 p-4">
+      <h5>For Admins</h5>
+      <p class="text-muted">Create treks, approve staff, assign guides, and keep an eye on every booking.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 p-4">
+      <h5>For Trek Staff</h5>
+      <p class="text-muted">Manage your assigned treks, update slots and status, and track participants.</p>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 p-4">
+      <h5>For Trekkers</h5>
+      <p class="text-muted">Browse open treks, book your spot, and keep a full history of your adventures.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

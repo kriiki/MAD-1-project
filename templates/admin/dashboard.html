@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-3">Admin Dashboard</h3>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="card text-center p-3">
+      <div class="fs-2 fw-bold text-primary">{{ stats.total_treks }}</div>
+      <div class="text-muted small">Total Treks</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center p-3">
+      <div class="fs-2 fw-bold text-primary">{{ stats.total_users }}</div>
+      <div class="text-muted small">Total Trekkers</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center p-3">
+      <div class="fs-2 fw-bold text-primary">{{ stats.total_staff }}</div>
+      <div class="text-muted small">Total Staff</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card text-center p-3">
+      <div class="fs-2 fw-bold text-primary">{{ stats.total_bookings }}</div>
+      <div class="text-muted small">Total Bookings</div>
+    </div>
+  </div>
+</div>
+
+{% if stats.pending_staff > 0 %}
+<div class="alert alert-warning">
+  {{ stats.pending_staff }} staff registration(s) awaiting approval.
+  <a href="{{ url_for('admin.staff_list') }}" class="alert-link">Review now &rarr;</a>
+</div>
+{% endif %}
+
+<div class="row g-4">
+  <div class="col-md-8">
+    <h5 class="mb-3">Recent Bookings</h5>
+    {% if recent_bookings %}
+    <div class="table-responsive">
+      <table class="table table-striped bg-white">
+        <thead><tr><th>ID</th><th>Trekker</th><th>Trek</th><th>Date</th><th>Status</th></tr></thead>
+        <tbody>
+          {% for b in recent_bookings %}
+          <tr>
+            <td>{{ b.id }}</td>
+            <td>{{ b.trekker.name }}</td>
+            <td>{{ b.trek.name }}</td>
+            <td>{{ b.booking_date.strftime('%d %b %Y') }}</td>
+            <td>{% if b.status == 'Booked' %}<span class="badge bg-success">{{ b.status }}</span>{% elif b.status == 'Cancelled' %}<span class="badge bg-danger">{{ b.status }}</span>{% elif b.status == 'Completed' %}<span class="badge bg-dark">{{ b.status }}</span>{% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="text-muted">No bookings yet.</p>
+    {% endif %}
+  </div>
+  <div class="col-md-4">
+    <h5 class="mb-3">Quick Actions</h5>
+    <div class="d-grid gap-2">
+      <a href="{{ url_for('admin.add_trek') }}" class="btn btn-success">+ Add New Trek</a>
+      <a href="{{ url_for('admin.staff_list') }}" class="btn btn-outline-secondary">Manage Staff</a>
+      <a href="{{ url_for('admin.users_list') }}" class="btn btn-outline-secondary">Manage Trekkers</a>
+      <a href="{{ url_for('admin.search') }}" class="btn btn-outline-secondary">Search</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

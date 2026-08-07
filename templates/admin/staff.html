@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Manage Staff{% endblock %}
+{% block content %}
+<h3 class="mb-3">Trek Staff</h3>
+
+{% if staff %}
+<div class="table-responsive">
+  <table class="table table-striped bg-white align-middle">
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Approval</th><th>Status</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for s in staff %}
+      <tr>
+        <td>{{ s.id }}</td>
+        <td>{{ s.name }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.phone or "—" }}</td>
+        <td>
+          {% if s.is_approved %}
+            <span class="badge bg-success">Approved</span>
+          {% else %}
+            <span class="badge bg-secondary">Pending</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if s.is_blacklisted %}
+            <span class="badge bg-danger">Blacklisted</span>
+          {% else %}
+            <span class="badge bg-success">Active</span>
+          {% endif %}
+        </td>
+        <td>
+          <div class="d-flex flex-column gap-1">
+            {% if not s.is_approved %}
+            <form method="POST" action="{{ url_for('admin.approve_staff', staff_id=s.id) }}">
+              <button type="submit" class="btn btn-sm btn-success w-100">Approve</button>
+            </form>
+            {% endif %}
+            <form method="POST" action="{{ url_for('admin.blacklist_staff', staff_id=s.id) }}">
+              <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                {{ "Reinstate" if s.is_blacklisted else "Blacklist" }}
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<p class="text-muted">No staff registered yet.</p>
+{% endif %}
+{% endblock %}
